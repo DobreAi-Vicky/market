@@ -5,6 +5,8 @@ import { env } from "~/env";
 
 export const itemsPerPage = 50;
 
+export const DEFAULT_CHAIN_ID = "0x534e5f4d41494e"; // SN_MAIN
+
 export const collectionSortDirectionKey = "direction";
 export const collectionSortDirectionsValues = ["asc", "desc"] as const;
 export const collectionSortDirectionsParser = parseAsStringLiteral(
@@ -33,6 +35,7 @@ export interface CollectionTokensApiResponse {
 
 interface GetCollectionTokensParams {
   collectionAddress: string;
+  chainId?: string;
   page?: number;
   sortDirection?: CollectionSortDirection;
   sortBy?: CollectionSortBy;
@@ -42,6 +45,7 @@ interface GetCollectionTokensParams {
 
 export async function getCollectionTokens({
   collectionAddress,
+  chainId,
   page,
   sortDirection,
   sortBy,
@@ -65,11 +69,11 @@ export async function getCollectionTokens({
   if (sortBy !== undefined) {
     queryParams.push(`sort=${sortBy}`);
   }
-  if (sortBy !== undefined) {
+  if (sortDirection !== undefined) {
     queryParams.push(`direction=${sortDirection}`);
   }
 
-  const url = `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/collections/${collectionAddress}/0x534e5f4d41494e/tokens?${queryParams.join("&")}`;
+  const url = `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/collections/${collectionAddress}/${chainId ?? DEFAULT_CHAIN_ID}/tokens?${queryParams.join("&")}`;
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",

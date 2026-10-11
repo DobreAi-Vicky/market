@@ -8,14 +8,16 @@ export interface TokenMarketDataApiResponse {
 interface GetTokenMarketParams {
   contractAddress: string;
   tokenId: string;
+  chainId?: string;
 }
 
 export default async function getTokenMarketData({
   contractAddress,
   tokenId,
+  chainId,
 }: GetTokenMarketParams) {
   const response = await fetch(
-    `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/tokens/${contractAddress}/0x534e5f4d41494e/${tokenId}/marketdata`,
+    `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/tokens/${contractAddress}/${chainId ?? "0x534e5f4d41494e"}/${tokenId}/marketdata`,
   );
 
   if (!response.ok) {
