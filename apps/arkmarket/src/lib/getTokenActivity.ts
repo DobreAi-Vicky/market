@@ -11,12 +11,14 @@ interface GetTokenActivityParams {
   contractAddress: string;
   page?: number;
   tokenId: string;
+  chainId?: string;
 }
 
 export default async function getTokenActivity({
   contractAddress,
   page,
   tokenId,
+  chainId,
 }: GetTokenActivityParams) {
   const queryParams = [`items_per_page=${30}`];
 
@@ -24,7 +26,7 @@ export default async function getTokenActivity({
     queryParams.push(`page=${page}`);
   }
 
-  const url = `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/tokens/${contractAddress}/0x534e5f4d41494e/${tokenId}/activity?${queryParams.join("&")}`;
+  const url = `${env.NEXT_PUBLIC_MARKETPLACE_API_URL}/tokens/${contractAddress}/${chainId ?? "0x534e5f4d41494e"}/${tokenId}/activity?${queryParams.join("&")}`;
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
